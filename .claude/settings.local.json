@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(curl:*)",
+      "Bash(where manim:*)",
+      "Bash(winget install:*)",
+      "Bash(where latex:*)",
+      "Bash(where pdflatex:*)",
+      "Read(//c/Users/Bubben/AppData/Local/Programs/MiKTeX/miktex/bin/x64//**)",
+      "Bash(export PATH=\"/c/Users/Bubben/AppData/Local/Programs/MiKTeX/miktex/bin/x64:$PATH\")",
+      "Bash(FFPROBE=\"C:/Users/Bubben/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1-full_build/bin/ffprobe.exe\" \"$FFPROBE\" -v quiet -show_streams -select_streams av \"C:/Draken/pipeline/output/DRK-122_20260330.mp4\")"
+    ]
+  }
+}

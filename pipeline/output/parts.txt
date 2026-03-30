@@ -1,0 +1,3 @@
+file 'C:/Draken/pipeline/output/broll_00.mp4'
+file 'C:/Draken/pipeline/output/manim_narrated.mp4'
+file 'C:/Draken/pipeline/output/broll_02.mp4'

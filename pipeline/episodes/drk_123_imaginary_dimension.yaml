@@ -1,0 +1,114 @@
+episode:
+  title: "The Imaginary Dimension"
+  series: "Draken Sheaf Ethology"
+  drk_ref: "DRK-123"
+
+content:
+  topic: "The fourth dimension of varanid combat as imaginary time — a Wick rotation in behavioral ecology"
+  duration_target_seconds: 120
+
+  narrative_arc:
+    hook: |
+      In quantum field theory, there is a trick that makes impossible calculations possible. You rotate time into an imaginary axis. Real time becomes imaginary time. The oscillating integral becomes a converging one. Physics calls this a Wick rotation.
+      130 million years before Gian Carlo Wick was born, monitor lizards discovered the same trick.
+
+    act_1_biology: |
+      When two male monitor lizards meet, they do not fight. They display.
+      They inflate their bodies. They raise themselves on hind legs. They present lateral profiles that maximize apparent size.
+      This is not aggression. This is projection — a broadcast of what this body COULD do if the encounter escalates.
+      The data is clear: Frydlova and colleagues documented 99 dyadic encounters in Varanus indicus.
+      77 percent showed ritualized elevation displays. Only 24 percent reached physical contact.
+      76 percent of all conflicts are resolved by a dimension of information that cannot be verified without contact.
+      They are resolved by the future. By what WOULD happen. Not by what does.
+
+    act_2_mathematics: |
+      We can formalize this precisely. At the Display node of the combat phase graph, each animal's state is a four-dimensional vector:
+      x_D equals the tuple M_abs, E_cap, L_SVL, and alpha.
+      Three dimensions encode the present. And notice what they are — and what they are not.
+      M_abs is absolute body mass. E_cap is metabolic endurance capacity. L_SVL is snout-vent length, a proxy for leverage in a grapple.
+      Not bite force. Varanid ritualized combat is wrestling. They clinch, they grapple, they attempt to topple. Biting would be a violation of the protocol — an escalation outside the sheaf entirely.
+      Frydlova's data confirms the selection: absolute mass predicts escalation at P less than 0.0001. Mass ratio does not — P equals 0.57. The protocol is testing who can outlast a sustained grapple, not who can inflict the most damage. These three dimensions are what that test requires.
+      They are measurable. They are real.
+      The fourth dimension, alpha, encodes the future. It is a projection of what these values COULD be under escalation — a broadcast of untested capacity. It is, in the precise mathematical sense, imaginary.
+
+      Now watch what happens at the Clinch phase, when bodies make contact.
+      The restriction map rho from Display to Clinch is a linear projection:
+      rho equals the matrix with the 3-by-3 identity block and a zero column.
+      It maps R4 to R3. The fourth dimension vanishes. Alpha equals zero.
+
+      This is formally identical to a Wick rotation. In quantum field theory, the Wick rotation maps Minkowski spacetime to Euclidean space by rotating real time t to imaginary time i times tau. The oscillating exponential e to the i H t becomes the convergent exponential e to the minus H tau.
+
+      The varanid restriction map performs the same operation. The imaginary dimension — the untested future — is rotated out when reality is contacted. Oscillation becomes convergence. Display becomes clinch. Possibility becomes measurement.
+
+    act_3_radical: |
+      Here is the claim that follows from the mathematics, and it is not modest:
+      The future is not a property of spacetime. The future is a computational dimension constructed by any system that maintains a generative model of its environment.
+
+      Friston's Free Energy Principle states this algebraically: an organism minimizes the quantity F equals the expected value of log q minus log p — the divergence between its model of the world and the world's actual sensory delivery. To minimize F, the organism must model states it has not yet encountered. It must construct an imaginary dimension and project into it.
+
+      The Draken optimization axiom captures the same structure: minimize systemic entropy S subject to the constraint that functional integrity dH dt is non-decreasing. You cannot satisfy this constraint without modeling future states. The imaginary dimension is not optional. It is load-bearing.
+
+      This means: every system that exhibits sheaf coherence — every system with a Gamma significantly above zero — is a system that has constructed a functional future. The varanid combat protocol does it with four-dimensional section data. Financial markets do it with derivatives and forward curves. Immune systems do it with anticipatory receptor diversity. Nervous systems do it with predictive coding.
+
+      The imaginary dimension is not a metaphor. It is the same mathematical structure recurring at every scale of the Draken 18-layer manifold. It is the dimension that makes the optimization axiom satisfiable.
+
+    conclusion: |
+      Gian Carlo Wick rotated time to make quantum field theory calculable.
+      Evolution rotated time to make conflict survivable.
+      The future is not where we are going. The future is the dimension we invented so that we don't have to go there.
+      And 76 percent of the time, it works.
+
+  visual_direction: |
+    Hook: Split screen — left side shows the Wick rotation equation e^{iHt} → e^{-Hτ} transforming, right side shows two monitor lizards in lateral display. The two images should visually rhyme.
+
+    Act 1: Build the 5-node combat graph node by node. At Display, show a large "76%" with paths branching — most paths exit, few continue. Animate the encounters as flow through the graph, with most particles deflecting at Display.
+
+    Act 2: At the Display node, show a 4D vector with three solid blue components and one shimmering translucent red component labeled α. Animate the restriction map as a matrix multiplication — the identity block passes three dimensions through, the zero column annihilates the fourth. Show the red dimension dissolving. Then show the Wick rotation equation alongside — visual parallel between e^{iHt} → e^{-Hτ} and ℝ⁴ → ℝ³.
+
+    Act 3: Zoom out progressively through Draken layers. Show the same α-like imaginary dimension appearing at each scale: varanid combat (L05-L06), financial derivatives (L11), immune anticipation (L03), predictive coding (L07). Each layer pulses with the same red-to-blue collapse pattern. The 18-layer manifold assembles itself with the imaginary dimension as the vertical thread connecting all layers.
+
+    Conclusion: The combat graph shrinks to a single point in the full 18-layer manifold. Camera pulls back to show the whole architecture. Final frame: the optimization axiom with the imaginary dimension glowing as the mechanism that makes it satisfiable.
+
+  key_equations:
+    - "x_D ∈ ℝ⁴ = (M_abs, E_cap, L_SVL, α)"
+    - "x_Cl ∈ ℝ³ = (M_abs, E_cap, L_SVL)"
+    - "ρ_{D→Cl} = [I₃ | 0] : ℝ⁴ → ℝ³"
+    - "Wick rotation: e^{iHt} → e^{-Hτ}"
+    - "F = E_q[log q(s) - log p(o,s)]"
+    - "◆ min S_sys(t) s.t. dH/dt ≥ 0 ◆"
+
+  narration_style: |
+    Older British male. Calm, measured, deliberate. Long pauses between ideas.
+    The tone of someone who has spent decades thinking about this and is now sharing it quietly, without hurry, because the ideas are strong enough to carry themselves.
+    Start with wonder. Build through precision. End with weight.
+    Never say "importantly" or "it should be noted" or "interestingly."
+    Let silence do the work that filler words usually steal.
+
+voice:
+  provider: siliconflow
+  model: FunAudioLLM/CosyVoice2-0.5B
+  language: en
+  style_direction: "Calm, measured, older British male. Attenborough-like warmth. Pauses between sentences. Quiet authority. Wonder without exclamation."
+
+video:
+  provider: siliconflow
+  model: Wan-AI/Wan2.2-T2V-A14B
+  resolution: 1280x720
+  style_prompt: "dark topological visualization, bioluminescent graph edges on obsidian substrate, mathematical notation floating in volumetric space, cinematic depth of field, slow deliberate camera movement, quantum field aesthetic"
+
+publish:
+  youtube_privacy: unlisted
+  tags:
+    - sheaf theory
+    - Wick rotation
+    - imaginary time
+    - ethology
+    - varanid combat
+    - active inference
+    - free energy principle
+    - Draken 2045
+    - behavioral ecology
+    - game theory
+    - quantum field theory
+    - topological data analysis
+  category: "28"

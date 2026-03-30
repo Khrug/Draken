@@ -1,0 +1,76 @@
+episode:
+  title: "Why Lizards Fight Like Gentlemen"
+  series: "Draken Sheaf Ethology"
+  drk_ref: "DRK-122"
+
+content:
+  topic: "5-node varanid combat phase graph and restriction map"
+  duration_target_seconds: 90
+
+  narrative_arc:
+    hook: "Monitor lizards have been fighting the same way for 130 million years. Not because they're stupid — because the protocol is perfect."
+
+    act_1_concrete: |
+      Show two male monitor lizards encountering each other. They don't just attack.
+      They follow a strict five-phase protocol: Display, Elevation, Clinch, Carry, Submission.
+      Each phase is an information exchange. At any point, the smaller male can withdraw — and usually does.
+      Only 24% of encounters reach actual physical contact.
+      The protocol is a negotiation, not a war.
+
+    act_2_mathematical: |
+      Now here's what's remarkable. We can model this protocol as a mathematical structure called a sheaf.
+      Each combat phase is a node. Each transition is an edge with a restriction map — a rule about what information must be consistent between phases.
+      The key insight: during Display, males have FOUR dimensions of information — size, force, energy, and bluff.
+      But at the Clinch phase, bluff disappears. The restriction map projects from 4D to 3D.
+      The bluff dimension gets zeroed out when bodies actually make contact.
+      That's the equation: rho maps R4 to R3 by setting alpha to zero.
+
+    act_3_insight: |
+      We computed the sheaf coherence score Gamma for three competing game-theory models.
+      The Sequential Assessment Game — where animals gather information progressively and quit when they know they'll lose — scored Gamma equals 0.928.
+      That's near-perfect coherence. The protocol works because it's designed to PREVENT unnecessary fighting, not to determine who fights best.
+
+    conclusion: |
+      This 130-million-year-old protocol satisfies the same optimization principle we see from molecular biology to economic systems.
+      Minimize entropy production subject to maintaining functional integrity.
+      The protocol is the agent. The individual lizard is just the substrate.
+      And that insight is the foundation of sheaf ethology.
+
+  visual_direction: |
+    Act 1: Animate the 5-node graph assembling itself node by node, with icons or labels for each phase. Use arrows showing the flow. Highlight the 76% dropout rate at Display with a branching path.
+    Act 2: Show the 4D vector at Display node, then animate the restriction map as a visual compression — the fourth dimension (labeled "bluff" or "alpha") physically shrinking to zero as we move to Clinch. Use color: bluff dimension in red, real dimensions in blue.
+    Act 3: Show three horizontal bars for the three models with their Gamma scores filling up like progress bars. SAG reaches 0.928 and pulses gold.
+    Conclusion: Zoom out from the combat graph to show it as one small piece of a larger 18-layer architecture.
+
+  key_equations:
+    - "x_Cl in R^3 = (F_max, E_ratio, Delta_m)"
+    - "Gamma = lambda_1 / lambda_max = 0.928"
+    - "rho_{D->Cl}: R^4 -> R^3 at alpha = 0"
+
+  narration_style: |
+    Conversational but precise. Like a brilliant professor at a pub explaining their life's work to a curious stranger. Start with wonder, not formalism. Let the math emerge from the biology, not the other way around. Use pauses for emphasis. Never say "it is important to note" or any academic filler.
+
+voice:
+  provider: siliconflow
+  model: FunAudioLLM/CosyVoice2-0.5B
+  language: en
+  style_direction: "Calm, measured pace. Older British male narrator. Think David Attenborough — warmth, wonder, quiet authority. Pauses between sentences. Never rushed. Let the ideas breathe."
+
+video:
+  provider: siliconflow
+  model: Wan-AI/Wan2.2-T2V-A14B
+  resolution: 1280x720
+  style_prompt: "dark topological visualization, bioluminescent graph edges on obsidian substrate, mathematical notation floating in volumetric space, cinematic depth of field, slow deliberate camera movement"
+
+publish:
+  youtube_privacy: unlisted
+  tags:
+    - sheaf theory
+    - ethology
+    - varanid combat
+    - active inference
+    - Draken 2045
+    - monitor lizard
+    - game theory
+    - behavioral ecology
+  category: "28"
