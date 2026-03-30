@@ -1,0 +1,49 @@
+﻿version: '3.8'
+
+services:
+  autogenstudio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: draken-autogenstudio
+    ports:
+      - "8081:8081"
+    environment:
+      # Load API keys from .env file
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # Uncomment and add to .env as needed
+      # - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      # - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+    volumes:
+      # Persist AutoGen Studio data
+      - autogenstudio-data:/app/.autogenstudio
+      # Optional: Mount local config if needed
+      # - ./config:/app/config:ro
+    restart: unless-stopped
+    networks:
+      - draken-network
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+    # Security options
+    security_opt:
+      - no-new-privileges:true
+    # Read-only root filesystem (with exceptions for writable paths)
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /app/.cache
+
+volumes:
+  autogenstudio-data:
+    driver: local
+
+networks:
+  draken-network:
+    driver: bridge

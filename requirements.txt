@@ -1,0 +1,10 @@
+﻿# Draken - AutoGen Studio Project
+
+# Core dependencies
+autogenstudio>=0.0.1
+
+# Production server
+gunicorn>=21.2.0
+
+# Optional: For better performance and monitoring
+python-dotenv>=1.0.0
