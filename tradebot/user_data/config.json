@@ -1,0 +1,97 @@
+{
+  "bot_name": "draken-bot",
+  "dry_run": true,
+  "dry_run_wallet": 90,
+  "stake_currency": "EUR",
+  "stake_amount": 20,
+  "tradable_balance_ratio": 0.99,
+  "max_open_trades": 2,
+  "fiat_display_currency": "SEK",
+  "trading_mode": "spot",
+  "timeframe": "1h",
+  "cancel_open_orders_on_exit": true,
+  "unfilledtimeout": {
+    "entry": 10,
+    "exit": 10,
+    "exit_timeout_count": 0,
+    "unit": "minutes"
+  },
+  "entry_pricing": {
+    "price_side": "same",
+    "use_order_book": true,
+    "order_book_top": 1,
+    "price_last_balance": 0.0,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "price_side": "same",
+    "use_order_book": true,
+    "order_book_top": 1
+  },
+  "pairlists": [
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "telegram": {
+    "enabled": false,
+    "token": "",
+    "chat_id": ""
+  },
+  "initial_state": "running",
+  "force_entry_enable": false,
+  "internals": {
+    "process_throttle_secs": 5
+  },
+  "api_server": {
+    "enabled": true,
+    "listen_ip_address": "0.0.0.0",
+    "listen_port": 8080,
+    "verbosity": "error",
+    "enable_openapi": false,
+    "jwt_secret_key": "",
+    "ws_token": "",
+    "CORS_origins": [],
+    "username": "draken",
+    "password": ""
+  },
+  "webhook": {
+    "enabled": false,
+    "url": "",
+    "format": "json",
+    "retries": 2,
+    "retry_delay": 1,
+    "entry_fill": {
+      "event": "entry",
+      "trade_id": "{trade_id}",
+      "pair": "{pair}",
+      "rate": "{open_rate}",
+      "amount": "{amount}",
+      "stake": "{stake_amount}",
+      "currency": "{stake_currency}"
+    },
+    "exit_fill": {
+      "event": "exit",
+      "trade_id": "{trade_id}",
+      "pair": "{pair}",
+      "open_rate": "{open_rate}",
+      "rate": "{close_rate}",
+      "profit_abs": "{profit_amount}",
+      "profit_ratio": "{profit_ratio}",
+      "reason": "{exit_reason}",
+      "stake": "{stake_amount}",
+      "currency": "{stake_currency}"
+    },
+    "status": {
+      "event": "status",
+      "status": "{status}"
+    },
+    "warning": {
+      "event": "warning",
+      "status": "{status}"
+    }
+  }
+}

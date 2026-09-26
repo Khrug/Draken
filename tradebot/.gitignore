@@ -1,0 +1,11 @@
+.env
+user_data/data/
+user_data/logs/
+user_data/results/
+user_data/backtest_results/
+user_data/cockpit/
+*.sqlite*
+.playwright-mcp/
+user_data/models/
+__pycache__/
+cockpit/assets/preview.png

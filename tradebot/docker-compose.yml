@@ -1,0 +1,87 @@
+# Paper trading only (dry_run: true). Every port is bound to 127.0.0.1: reachable from this PC only.
+x-bot: &bot
+  image: freqtradeorg/freqtrade:stable
+  restart: unless-stopped
+  env_file: .env
+  volumes:
+    - "./user_data:/freqtrade/user_data"
+
+services:
+  # Tooling for backtesting: `docker compose run --rm freqtrade <command>`
+  # Revolut X candles: `docker compose run --rm --entrypoint python freqtrade /freqtrade/tools/revolutx_candles.py ...`
+  freqtrade:
+    image: freqtradeorg/freqtrade:stable
+    profiles: ["tools"]
+    env_file: .env
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+      - "./tools:/freqtrade/tools:ro"
+
+  # Same, with the FreqAI machine-learning libraries: `docker compose run --rm freqai-tools ...`
+  freqai-tools:
+    image: freqtradeorg/freqtrade:stable_freqai
+    profiles: ["tools"]
+    env_file: .env
+    volumes:
+      - "./user_data:/freqtrade/user_data"
+
+  bot-trend:
+    <<: *bot
+    container_name: draken-trend
+    environment:
+      FREQTRADE__WEBHOOK__URL: "http://cockpit:8090/hook/trend?t=${HOOK_TOKEN}"
+    ports: ["127.0.0.1:8081:8080"]   # FreqUI for the trend bot
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/trend.log
+      --db-url sqlite:////freqtrade/user_data/trend.dryrun.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.bitvavo.json
+      --config /freqtrade/user_data/bots/trend.json
+      --strategy TrendEmaAdx
+
+  bot-breakout:
+    <<: *bot
+    container_name: draken-breakout
+    environment:
+      FREQTRADE__WEBHOOK__URL: "http://cockpit:8090/hook/breakout?t=${HOOK_TOKEN}"
+    ports: ["127.0.0.1:8082:8080"]   # FreqUI for the breakout bot
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/breakout.log
+      --db-url sqlite:////freqtrade/user_data/breakout.dryrun.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.bitvavo.json
+      --config /freqtrade/user_data/bots/breakout.json
+      --strategy BreakoutDonchian
+
+  bot-gamma:
+    <<: *bot
+    container_name: draken-gamma
+    environment:
+      FREQTRADE__WEBHOOK__URL: "http://cockpit:8090/hook/gamma?t=${HOOK_TOKEN}"
+    ports: ["127.0.0.1:8083:8080"]   # FreqUI for the coherence bot
+    command: >
+      trade
+      --logfile /freqtrade/user_data/logs/gamma.log
+      --db-url sqlite:////freqtrade/user_data/gamma.dryrun.sqlite
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.bitvavo.json
+      --config /freqtrade/user_data/bots/gamma.json
+      --strategy DrakenGamma
+
+  cockpit:
+    image: python:3.12-slim
+    container_name: draken-cockpit
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      TZ: Europe/Stockholm
+      BOTS: "trend=http://bot-trend:8080,breakout=http://bot-breakout:8080,gamma=http://bot-gamma:8080"
+      SUMMARY_HOURS: "8,20"
+    ports: ["127.0.0.1:8090:8090"]   # the Draken cockpit
+    volumes:
+      - "./cockpit:/app:ro"
+      - "./user_data/results:/results:ro"
+      - "./user_data/cockpit:/state"
+    command: ["python", "-u", "/app/server.py"]

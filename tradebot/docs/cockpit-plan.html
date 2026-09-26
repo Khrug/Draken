@@ -1,0 +1,469 @@
+<title>Draken Cockpit Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --bg:#f1f4f3; --surface:#ffffff; --ink:#13201c; --ink-2:#44544f; --muted:#6f7f7a; --line:#d5ddda; --grid:#e6ecea;
+  --accent:#0e6e62; --accent-soft:#dcefeb;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --bench:#8c9894;
+  --good:#0ca30c; --warn:#fab219; --crit:#d03b3b;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0e1412; --surface:#151d1a; --ink:#e6eeeb; --ink-2:#a9b8b3; --muted:#83948e; --line:#26322e; --grid:#1f2926;
+    --accent:#45b5a4; --accent-soft:#17312c;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --bench:#7d8a86;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0e1412; --surface:#151d1a; --ink:#e6eeeb; --ink-2:#a9b8b3; --muted:#83948e; --line:#26322e; --grid:#1f2926;
+  --accent:#45b5a4; --accent-soft:#17312c;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --bench:#7d8a86;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);padding-inline:20px;padding-block:32px 64px}
+.wrap{max-width:1000px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(34px,6vw,54px);font-weight:800;font-stretch:80%;line-height:1.02}
+h2{font-size:26px;font-weight:700;font-stretch:85%}
+h3{font-size:17px;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:19px;color:var(--ink-2)}
+section{display:flex;flex-direction:column;gap:18px}
+.head{display:flex;flex-direction:column;gap:14px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+code{font:14px var(--mono);background:var(--accent-soft);padding:1px 5px;border-radius:4px}
+
+/* pipeline strip */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stage{background:var(--surface);padding:14px 14px 16px;display:flex;flex-direction:column;gap:8px}
+.stage b{font-family:var(--display);font-size:16px}
+.stage span{font-size:13.5px;color:var(--ink-2);line-height:1.4}
+.chip{align-self:flex-start;font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 7px 4px;border-radius:99px;display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);color:var(--ink-2)}
+.chip i{width:7px;height:7px;border-radius:50%;background:var(--muted);display:block}
+.chip.run i{background:var(--good);box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 25%,transparent)}
+.chip.ready i{background:var(--accent)}
+.chip.lock i{background:var(--crit)}
+@media (max-width:760px){.pipe{grid-template-columns:1fr 1fr}.stage:last-child{grid-column:1/-1}}
+
+/* figures */
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:10px;position:relative}
+.fig svg{width:100%;height:auto;display:block;overflow:visible}
+.fig .cap{font-size:14px;color:var(--ink-2)}
+.fig .teach{font-size:14px;color:var(--ink);border-top:1px solid var(--grid);padding-top:10px}
+.fig .teach b{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:block}
+.legend i.ln{height:2px;border-radius:1px}
+.example{position:absolute;top:14px;right:14px;font:600 10.5px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);padding:5px 7px;border-radius:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+.axis text,.lbl{font:11.5px var(--mono);fill:var(--muted)}
+.dlbl{font:600 12px var(--mono);fill:var(--ink)}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--bg);font:12.5px/1.4 var(--mono);padding:7px 9px;border-radius:6px;z-index:9;white-space:nowrap}
+
+/* break-even tiles */
+.be{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.be div{border-left:3px solid var(--line);padding:4px 0 4px 12px;display:flex;flex-direction:column;gap:2px}
+.be div:first-child{border-color:var(--crit)}
+.be strong{font:700 28px/1.1 var(--mono)}
+.be small{font-size:13.5px;color:var(--ink-2)}
+@media (max-width:560px){.be{grid-template-columns:1fr}}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:640px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--grid);vertical-align:top}
+th{font:600 11.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.num{white-space:nowrap}
+tr.pick td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.tag{font:600 11px var(--mono);padding:2px 6px;border-radius:4px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.tag.no{background:color-mix(in srgb,var(--crit) 14%,transparent);color:var(--crit)}
+
+/* controls */
+.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:760px){.controls{grid-template-columns:1fr}}
+.ctl{border-top:2px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.ctl ul{margin:0;padding-left:18px;font-size:14.5px;color:var(--ink-2)}
+.lockbox{border:1px solid var(--crit);border-radius:10px;padding:16px 18px;display:flex;gap:14px;align-items:flex-start;background:color-mix(in srgb,var(--crit) 6%,var(--surface))}
+.lockbox svg{flex:none}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+ol.steps,ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+ol.steps li::marker{font-family:var(--mono);color:var(--muted)}
+.road{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.road div{position:relative;padding:0 0 18px 20px;display:flex;flex-direction:column;gap:3px}
+.road div::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--muted)}
+.road div.now::before{border-color:var(--good);background:var(--good)}
+.road div.gate::before{border-color:var(--crit)}
+.road b{font-family:var(--display)}
+.road span{font-size:14.5px;color:var(--ink-2)}
+.decide{background:var(--accent-soft);border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;gap:10px}
+.sources{font-size:13px;color:var(--muted);columns:2;column-gap:28px}
+.sources a{color:var(--ink-2);word-break:break-all}
+@media (max-width:640px){.sources{columns:1}}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+
+<div class="wrap">
+
+<header class="head">
+  <div class="eyebrow">draken-bot · plan · 26 Sep 2026 · dry-run only</div>
+  <h1>Draken Cockpit Plan</h1>
+  <p class="lede">How the trading bot should look, how you control it, and where it should trade. The plan draws on two research passes: one on exchanges and fees, one on open-source bots and competitors. One finding shapes everything else: at €90, fees are the opponent to beat.</p>
+</header>
+
+<section aria-labelledby="where">
+  <h2 id="where">Where we are</h2>
+  <div class="pipe">
+    <div class="stage"><span class="chip run"><i></i>Running</span><b>1 · Data</b><span>Kraken trade history for BTC, ETH, SOL downloading. Several hours.</span></div>
+    <div class="stage"><span class="chip ready"><i></i>Ready</span><b>2 · Backtest</b><span>3 strategies × 3 timeframes. Fees set to Kraken's real 0.8 %.</span></div>
+    <div class="stage"><span class="chip ready"><i></i>Ready</span><b>3 · Gate</b><span>Automatic pass/fail on rules fixed in advance. Report to Telegram.</span></div>
+    <div class="stage"><span class="chip"><i></i>Waiting</span><b>4 · Paper</b><span>Best survivor trades fake money for 3–4 weeks.</span></div>
+    <div class="stage"><span class="chip lock"><i></i>Locked</span><b>5 · Live</b><span>Your decision only, small stake, hard loss limit.</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="fees">
+  <div class="eyebrow">Finding 1</div>
+  <h2 id="fees">Fees decide whether any strategy can win</h2>
+  <p>Kraken raised its lowest-tier fees on 9 July 2026 to 0.40 % maker and 0.80 % taker (I confirmed this on Kraken's own fee page). Each trade pays twice, once to buy and once to sell, so every trade has to earn at least this much just to break even:</p>
+  <div class="be">
+    <div><strong class="num">1.60 %</strong><small>Kraken, market orders both ways</small></div>
+    <div><strong class="num">0.50 %</strong><small>Bitvavo, market orders both ways</small></div>
+    <div><strong class="num">0.40 %</strong><small>OKX EU, market orders both ways</small></div>
+  </div>
+  <figure class="fig" style="margin:0">
+    <h3>Share of the account paid in fees per day</h3>
+    <div class="cap">Fully invested, market orders both ways. Spread and slippage come on top.</div>
+    <div class="legend" id="feeLegend"></div>
+    <svg id="feeChart" viewBox="0 0 900 330" role="img" aria-label="Grouped bar chart of daily fee drag by trades per day for Kraken, Bitvavo and OKX EU"></svg>
+    <div class="teach"><b>What this teaches:</b> a bot that trades 5 times a day on Kraken has to earn 8 % a day before it makes a single euro. That rules out scalping. Only slow strategies (1-hour candles or longer, a few trades a week) using limit orders have a realistic chance.</div>
+  </figure>
+</section>
+
+<section aria-labelledby="cockpit">
+  <div class="eyebrow">The front end</div>
+  <h2 id="cockpit">The cockpit: four charts that teach</h2>
+  <p>Each panel answers one question a beginner should ask of any trading bot. The data below is invented to show the design. The real cockpit reads live numbers from the bot.</p>
+  <div class="grid2">
+    <figure class="fig" style="margin:0">
+      <span class="example">Example data</span>
+      <h3>Did we beat doing nothing?</h3>
+      <div class="legend"><span><i class="ln" style="background:var(--s1)"></i>Bot</span><span><i class="ln" style="background:var(--bench)"></i>Just holding BTC</span></div>
+      <svg id="eqChart" viewBox="0 0 440 230" role="img" aria-label="Example equity curve of the bot versus holding BTC"></svg>
+      <div class="teach"><b>Teaches:</b> a bot that makes money but less than holding has still lost. Every result is shown next to holding BTC.</div>
+    </figure>
+    <figure class="fig" style="margin:0">
+      <span class="example">Example data</span>
+      <h3>Is it overfitted?</h3>
+      <div class="legend"><span><i style="background:var(--s1);border-radius:50%"></i>One strategy × timeframe</span></div>
+      <svg id="ovChart" viewBox="0 0 440 230" role="img" aria-label="Example scatter of in-sample versus out-of-sample profit"></svg>
+      <div class="teach"><b>Teaches:</b> dots far below the diagonal looked great on the data they were designed on and failed on new data. That gap is overfitting, made visible.</div>
+    </figure>
+    <figure class="fig" style="margin:0">
+      <span class="example">Example data</span>
+      <h3>Where did the profit go?</h3>
+      <svg id="wfChart" viewBox="0 0 440 230" role="img" aria-label="Example waterfall from gross profit through fees to net result"></svg>
+      <div class="teach"><b>Teaches:</b> the strategy found a real edge (gross +€6.20), and fees ate all of it and more.</div>
+    </figure>
+    <figure class="fig" style="margin:0">
+      <span class="example">Example data</span>
+      <h3>How deep was the worst dip?</h3>
+      <svg id="ddChart" viewBox="0 0 440 230" role="img" aria-label="Example drawdown chart"></svg>
+      <div class="teach"><b>Teaches:</b> the 15 % line is the hard limit. A strategy that crosses it in testing is rejected, however much it earned.</div>
+    </figure>
+  </div>
+  <p>Beyond these four, the cockpit also has a per-trade chart showing the candles, the indicator values, and the exact reason the bot entered and exited. There is also a paper-vs-backtest band: if live paper results fall outside the range the backtest predicted, the cockpit flags it.</p>
+</section>
+
+<section aria-labelledby="control">
+  <div class="eyebrow">Control</div>
+  <h2 id="control">Three ways to control it, one lock</h2>
+  <div class="controls">
+    <div class="ctl"><h3>Telegram, on your phone</h3><ul><li>Already connected (@KRUKMAKARENS_bot)</li><li><code>/status</code> <code>/profit</code> <code>/daily</code> <code>/stop</code></li><li>Alerts on every trade and backtest verdict</li></ul></div>
+    <div class="ctl"><h3>FreqUI, on the PC</h3><ul><li>Freqtrade's built-in web interface</li><li>Trade list, candle charts, backtest viewer</li><li>Reachable only from this PC, password protected</li></ul></div>
+    <div class="ctl"><h3>Draken cockpit</h3><ul><li>The teaching dashboard above</li><li>One self-contained HTML file, same style as the other Draken modules</li><li>Read-only, plus Pause and Stop</li></ul></div>
+  </div>
+  <div class="lockbox">
+    <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="var(--crit)" stroke-width="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="var(--crit)" stroke-width="2"/></svg>
+    <p><b>No interface can turn on real money.</b> Going live requires you to edit the config file by hand and to add exchange API keys that can trade but never withdraw. This protects against a leaked or hijacked key, the way 3Commas users lost $14.8M in 2022.</p>
+  </div>
+  <pre class="mermaid">
+flowchart LR
+  K[(Exchange<br/>Kraken / Bitvavo)] -->|prices| F[Freqtrade bot<br/>Docker, dry-run]
+  F -->|REST API, localhost only| U[FreqUI]
+  F -->|REST API, localhost only| C[Draken cockpit]
+  F <-->|alerts and commands| T[Telegram]
+  B[Backtests + gate] -->|report| T
+  B -->|results| C
+  </pre>
+</section>
+
+<section aria-labelledby="venues">
+  <div class="eyebrow">Finding 2</div>
+  <h2 id="venues">Where to trade from Sweden</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Venue</th><th>Maker / taker</th><th>Round trip (taker)</th><th>EU licence (MiCA)</th><th>Freqtrade</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr class="pick"><td><b>Bitvavo</b></td><td class="num">0.15 / 0.25 %</td><td class="num">0.50 %</td><td>Yes (NL)</td><td>Official</td><td><span class="tag">Recommended</span></td></tr>
+      <tr><td><b>OKX EU</b></td><td class="num">0.10 / 0.20 %</td><td class="num">0.40 %</td><td>Yes (Malta)</td><td>Official, EU account untested</td><td><span class="tag">Alternative</span></td></tr>
+      <tr><td><b>Bitstamp</b></td><td class="num">0.30 / 0.40 %</td><td class="num">0.80 %</td><td>Yes (Lux.)</td><td>Not official</td><td>Possible</td></tr>
+      <tr><td><b>Coinbase Adv.</b></td><td class="num">0.25 / 0.50 %</td><td class="num">1.00 %</td><td>Yes</td><td>Not official</td><td>Possible</td></tr>
+      <tr><td><b>Kraken</b></td><td class="num">0.40 / 0.80 %</td><td class="num">1.60 %</td><td>Yes</td><td>Official</td><td>Paper only</td></tr>
+      <tr><td><b>Binance</b></td><td class="num">≈0.10 %</td><td class="num">–</td><td>No, leaving EU</td><td>Official</td><td><span class="tag no">Avoid</span></td></tr>
+      <tr><td><b>IBKR / Avanza / Nordnet</b></td><td colspan="4">Minimum fee of $1.75 per order (IBKR), or no usable bot API (Avanza, Nordnet)</td><td><span class="tag no">Not viable</span></td></tr>
+    </tbody>
+  </table></div>
+  <p>Bitvavo offers ready-made candle history, so testing there would skip the slow Kraken download entirely. Its fees are about a third of Kraken's. One gap: Bitvavo cannot hold a stop-loss order on its side, so Freqtrade has to watch the stop-loss itself.</p>
+  <p><b>Swedish tax.</b> Every sale or swap is a taxable disposal. You declare them on K4 section D using the average-cost method (genomsnittsmetoden). Gains are taxed at 30 %, and only 70 % of losses are deductible. A bot trading daily creates hundreds of disposals a year. Divly produces a K4 directly. Koinly's plans that cover that many transactions cost more than the whole €90 stake.</p>
+</section>
+
+<section aria-labelledby="learn">
+  <div class="eyebrow">Finding 3</div>
+  <h2 id="learn">What the open-source world teaches</h2>
+  <div class="cols">
+    <div>
+      <h3 style="margin-bottom:10px">What we borrow</h3>
+      <ol class="steps">
+        <li><b>Automatic bias checks.</b> Freqtrade's <code>lookahead-analysis</code> and <code>recursive-analysis</code> run on every strategy change.</li>
+        <li><b>Fixed test periods</b> covering a bull, a bear and a sideways market, as NostalgiaForInfinity does in its test pipeline.</li>
+        <li><b>Walk-forward testing.</b> Tune only on in-sample data and never touch the last 3 months.</li>
+        <li><b>Parameter heatmaps</b> (vectorbt). Pick a stable region rather than the single best point.</li>
+        <li><b>Limit orders</b> to pay the maker fee, which halves the cost. We also borrow Hummingbot's separation of trading signals from order handling.</li>
+      </ol>
+    </div>
+    <div>
+      <h3 style="margin-bottom:10px">Traps we avoid</h3>
+      <ol class="steps">
+        <li><b>Ignoring fees.</b> This alone kills most 5- and 15-minute strategies.</li>
+        <li><b>Over-tuning.</b> In a study of 888 Quantopian strategies, backtest performance barely predicted live results (R² &lt; 0.025).</li>
+        <li><b>Leaderboards.</b> They show backtests only, with no verified live records. One leaderboard site, strat.ninja, has already disappeared.</li>
+        <li><b>Survivorship.</b> Pick pairs from what existed at the start of the test period, not today's winners.</li>
+        <li><b>API keys that allow withdrawals.</b> Ours will only ever be trade-only.</li>
+      </ol>
+    </div>
+  </div>
+  <p>The research also shows which edges actually survive fees. Slow trend-following on hourly or daily candles holds up best, mainly because it avoids big crashes. Fast mean reversion is real but tiny: about 0.013 % per trade against our 1.6 % cost. Market making and funding-rate carry need sizes or products we don't have.</p>
+</section>
+
+<section aria-labelledby="road">
+  <h2 id="road">Roadmap</h2>
+  <div class="cols">
+    <div class="road">
+      <div class="now"><b>Now · Data download</b><span>Kraken history, running in the background</span></div>
+      <div><b>Backtest matrix + gate</b><span>Automatic run, report to Telegram. Script is ready.</span></div>
+      <div><b>Bias checks + 1h/4h trend variants</b><span>Lookahead analysis, maker-order config, holding-BTC benchmark</span></div>
+      <div><b>Cockpit v1</b><span>FreqUI enabled on localhost, Draken cockpit with the four charts</span></div>
+      <div><b>Paper trading, 3–4 weeks</b><span>Best survivor, tracked against its backtest band</span></div>
+      <div class="gate"><b>Your decision · live?</b><span>Only if something survives. Small stake, trade-only key.</span></div>
+    </div>
+    <div class="decide">
+      <h3>Decisions for you</h3>
+      <ol class="steps">
+        <li><b>Test on Bitvavo as well?</b> It needs no account for data and would give results within the hour instead of tomorrow.</li>
+        <li><b>Drop the 5-minute timeframe?</b> The research says it cannot beat fees. Keeping it in this first run costs nothing and shows the lesson in real numbers.</li>
+        <li><b>Cockpit placement:</b> local only, or also a read-only snapshot on draken.info? Nothing would be published without your approval.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="src">
+  <h2 id="src" style="font-size:18px">Sources</h2>
+  <div class="sources">
+    <p><a href="https://www.kraken.com/features/fee-schedule">kraken.com/features/fee-schedule</a></p>
+    <p><a href="https://bitvavo.com/en/fees">bitvavo.com/en/fees</a></p>
+    <p><a href="https://www.okx.com/en-eu/help/important-notice-upcoming-spot-fee-adjustment-eea">OKX EEA spot fee notice</a></p>
+    <p><a href="https://www.coindesk.com/policy/2026/06/26/binance-tells-eu-users-it-will-no-longer-provide-services-after-failing-to-secure-mica-license">CoinDesk: Binance and MiCA</a></p>
+    <p><a href="https://www.skatteverket.se/privat/skatter/vardepapper/andratillgangar/kryptovalutor.4.15532c7b1442f256bae11b60.html">Skatteverket: kryptovalutor</a></p>
+    <p><a href="https://www.freqtrade.io/en/stable/lookahead-analysis/">Freqtrade lookahead analysis</a></p>
+    <p><a href="https://github.com/iterativv/NostalgiaForInfinity">NostalgiaForInfinity</a></p>
+    <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2745220">Wiecki et al., 888 Quantopian algorithms</a></p>
+    <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4675565">Han, Kang &amp; Ryu, crypto momentum with costs</a></p>
+    <p><a href="https://arxiv.org/abs/2608.21888">Kitron &amp; Wengrowicz, 15-minute reversal</a></p>
+    <p><a href="https://cointelegraph.com/news/3commas-ceo-confirms-api-key-leak-following-warning-from-cz">3Commas API key leak</a></p>
+    <p><a href="https://hummingbot.org/dashboard/">Hummingbot dashboard</a></p>
+  </div>
+</section>
+
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script>
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const tip = document.getElementById("tip");
+  const el = (tag, attrs, parent, text) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const hover = (node, html) => {
+    node.style.cursor = "default";
+    node.addEventListener("pointermove", e => {
+      tip.innerHTML = html; tip.hidden = false;
+      const w = tip.offsetWidth;
+      tip.style.left = Math.min(e.clientX + 14, innerWidth - w - 8) + "px";
+      tip.style.top = (e.clientY + 14) + "px";
+    });
+    node.addEventListener("pointerleave", () => { tip.hidden = true; });
+  };
+  const yAxis = (svg, x0, x1, y, ticks, fmt) => {
+    const g = el("g", {class: "axis"}, svg);
+    ticks.forEach(t => {
+      el("line", {x1: x0, x2: x1, y1: y(t), y2: y(t), stroke: t === 0 ? "var(--muted)" : "var(--grid)", "stroke-width": 1}, g);
+      el("text", {x: x0 - 8, y: y(t) + 4, "text-anchor": "end"}, g, fmt(t));
+    });
+  };
+
+  // ---- Fee drag (real numbers from the venue research) ----
+  {
+    const svg = document.getElementById("feeChart");
+    const series = [
+      {name: "Kraken", color: "var(--s1)", rt: 1.6},
+      {name: "Bitvavo", color: "var(--s2)", rt: 0.5},
+      {name: "OKX EU", color: "var(--s3)", rt: 0.4},
+    ];
+    const lg = document.getElementById("feeLegend");
+    series.forEach(s => { lg.insertAdjacentHTML("beforeend", `<span><i style="background:${s.color}"></i>${s.name} (${s.rt.toFixed(1)} % per round trip)</span>`); });
+    const cats = [1, 3, 5, 10];
+    const L = 56, R = 890, T = 16, B = 290;
+    const y = v => B - (v / 16) * (B - T);
+    yAxis(svg, L, R, y, [0, 4, 8, 12, 16], t => t + " %");
+    const gw = (R - L) / cats.length, bw = 44, gap = 2;
+    cats.forEach((c, i) => {
+      const cx = L + gw * i + gw / 2;
+      el("text", {x: cx, y: B + 24, "text-anchor": "middle", class: "lbl"}, svg, c + (c === 1 ? " trade/day" : " trades/day"));
+      series.forEach((s, j) => {
+        const v = c * s.rt;
+        const x = cx - (bw * 3 + gap * 2) / 2 + j * (bw + gap);
+        const h = B - y(v);
+        const r = Math.min(4, h);
+        const d = `M${x},${B} V${y(v) + r} Q${x},${y(v)} ${x + r},${y(v)} H${x + bw - r} Q${x + bw},${y(v)} ${x + bw},${y(v) + r} V${B} Z`;
+        const p = el("path", {d, fill: s.color}, svg);
+        if (c === 10 || c === 1) el("text", {x: x + bw / 2, y: y(v) - 6, "text-anchor": "middle", class: "dlbl"}, svg, v.toFixed(1));
+        const hit = el("rect", {x, y: T, width: bw, height: B - T, fill: "transparent"}, svg);
+        hover(hit, `${s.name} · ${c} trade${c > 1 ? "s" : ""}/day<br><b>${v.toFixed(1)} %</b> of account per day<br>≈ €${(90 * v / 100).toFixed(2)} on €90`);
+      });
+    });
+  }
+
+  // ---- Example data: seeded so the mockup is stable ----
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const N = 90;
+  const hold = [90], bot = [90];
+  for (let i = 1; i < N; i++) {
+    const m = (rnd() - 0.47) * 0.045;
+    hold.push(hold[i - 1] * (1 + m));
+    const inMkt = rnd() > 0.45;
+    bot.push(bot[i - 1] * (1 + (inMkt ? m * 0.8 : 0) - (rnd() > 0.85 ? 0.004 : 0)));
+  }
+
+  // Equity vs hold
+  {
+    const svg = document.getElementById("eqChart");
+    const L = 44, R = 430, T = 12, B = 200;
+    const all = hold.concat(bot);
+    const lo = Math.floor(Math.min(...all) / 10) * 10, hi = Math.ceil(Math.max(...all) / 10) * 10;
+    const y = v => B - (v - lo) / (hi - lo) * (B - T);
+    const x = i => L + i / (N - 1) * (R - L);
+    const ticks = []; for (let t = lo; t <= hi; t += 10) ticks.push(t);
+    yAxis(svg, L, R, y, ticks, t => "€" + t);
+    [0, 30, 60, 89].forEach(i => el("text", {x: x(i), y: B + 18, "text-anchor": "middle", class: "lbl"}, svg, "day " + (i + 1)));
+    const line = (arr, c) => el("path", {d: arr.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1)).join(""), fill: "none", stroke: c, "stroke-width": 2, "stroke-linejoin": "round"}, svg);
+    line(hold, "var(--bench)"); line(bot, "var(--s1)");
+    el("circle", {cx: x(N - 1), cy: y(bot[N - 1]), r: 4, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2}, svg);
+    const cross = el("line", {y1: T, y2: B, stroke: "var(--muted)", "stroke-dasharray": "3 3", visibility: "hidden"}, svg);
+    const hit = el("rect", {x: L, y: T, width: R - L, height: B - T, fill: "transparent"}, svg);
+    hit.addEventListener("pointermove", e => {
+      const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+      const i = Math.max(0, Math.min(N - 1, Math.round((p.x - L) / (R - L) * (N - 1))));
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      tip.innerHTML = `Day ${i + 1}<br>Bot €${bot[i].toFixed(2)}<br>Holding €${hold[i].toFixed(2)}`;
+      tip.hidden = false; tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + "px"; tip.style.top = e.clientY + 14 + "px";
+    });
+    hit.addEventListener("pointerleave", () => { tip.hidden = true; cross.setAttribute("visibility", "hidden"); });
+  }
+
+  // Overfitting scatter
+  {
+    const svg = document.getElementById("ovChart");
+    const pts = [
+      ["Trend 5m", 14, -6], ["Trend 15m", 11, -2], ["Trend 1h", 8, 3],
+      ["MeanRev 5m", 22, -12], ["MeanRev 15m", 12, -7], ["MeanRev 1h", 5, -1],
+      ["Breakout 5m", 18, -9], ["Breakout 15m", 9, -3], ["Breakout 1h", 7, 2],
+    ];
+    const L = 44, R = 430, T = 12, B = 192;
+    const x = v => L + (v + 15) / 40 * (R - L);
+    const y = v => B - (v + 15) / 40 * (B - T);
+    yAxis(svg, L, R, y, [-15, -5, 5, 15, 25], t => (t > 0 ? "+" : "") + t + "%");
+    [-15, -5, 5, 15, 25].forEach(t => el("text", {x: x(t), y: B + 16, "text-anchor": "middle", class: "lbl"}, svg, (t > 0 ? "+" : "") + t + "%"));
+    el("line", {x1: x(0), x2: x(0), y1: T, y2: B, stroke: "var(--muted)"}, svg);
+    el("line", {x1: x(-15), y1: y(-15), x2: x(25), y2: y(25), stroke: "var(--muted)", "stroke-dasharray": "4 4"}, svg);
+    el("text", {x: x(17), y: y(20) - 6, class: "lbl", "text-anchor": "end"}, svg, "held up");
+    el("text", {x: R - 4, y: B - 6, class: "lbl", "text-anchor": "end"}, svg, "in-sample profit →");
+    el("text", {x: L + 4, y: T + 10, class: "lbl"}, svg, "↑ out-of-sample");
+    pts.forEach(([n, a, b]) => {
+      const c = el("circle", {cx: x(a), cy: y(b), r: 5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2}, svg);
+      const h = el("circle", {cx: x(a), cy: y(b), r: 12, fill: "transparent"}, svg);
+      hover(h, `${n}<br>In-sample ${a > 0 ? "+" : ""}${a} %<br>Out-of-sample ${b > 0 ? "+" : ""}${b} %`);
+    });
+  }
+
+  // Waterfall
+  {
+    const svg = document.getElementById("wfChart");
+    const steps = [["Gross profit", 0, 6.2, "var(--s1)"], ["Fees", 6.2, -1.7, "var(--crit)"], ["Net", 0, -1.7, "var(--ink-2)"]];
+    const L = 44, R = 430, T = 12, B = 196;
+    const y = v => T + (8 - v) / 12 * (B - T);
+    yAxis(svg, L, R, y, [-4, 0, 4, 8], t => "€" + t);
+    const gw = (R - L) / 3, bw = 70;
+    steps.forEach(([n, a, b, c], i) => {
+      const x0 = L + gw * i + (gw - bw) / 2;
+      const top = y(Math.max(a, b)), bot = y(Math.min(a, b));
+      el("rect", {x: x0, y: top, width: bw, height: bot - top, rx: 3, fill: c}, svg);
+      const delta = i === 1 ? b - a : b;
+      el("text", {x: x0 + bw / 2, y: (delta >= 0 ? top - 6 : bot + 15), "text-anchor": "middle", class: "dlbl"}, svg, (delta >= 0 ? "+€" : "−€") + Math.abs(delta).toFixed(2));
+      el("text", {x: x0 + bw / 2, y: B + 22, "text-anchor": "middle", class: "lbl"}, svg, n);
+      if (i < 2) el("line", {x1: x0 + bw, x2: x0 + gw, y1: y(b), y2: y(b), stroke: "var(--muted)", "stroke-dasharray": "2 3"}, svg);
+      hover(el("rect", {x: x0, y: T, width: bw, height: B - T, fill: "transparent"}, svg), `${n}: ${(delta >= 0 ? "+€" : "−€") + Math.abs(delta).toFixed(2)}${i === 1 ? "<br>31 trades × 0.8 % × 2 sides" : ""}`);
+    });
+  }
+
+  // Drawdown
+  {
+    const svg = document.getElementById("ddChart");
+    let peak = bot[0];
+    const dd = bot.map(v => { peak = Math.max(peak, v); return (v / peak - 1) * 100; });
+    const L = 44, R = 430, T = 12, B = 196;
+    const y = v => T + (-v) / 20 * (B - T);
+    const x = i => L + i / (N - 1) * (R - L);
+    yAxis(svg, L, R, y, [0, -5, -10, -15, -20], t => t + "%");
+    el("line", {x1: L, x2: R, y1: y(-15), y2: y(-15), stroke: "var(--crit)", "stroke-width": 1.5, "stroke-dasharray": "5 4"}, svg);
+    el("text", {x: R - 4, y: y(-15) - 6, "text-anchor": "end", class: "lbl", fill: "var(--crit)"}, svg, "reject line −15 %");
+    const pts = dd.map((v, i) => x(i).toFixed(1) + "," + y(v).toFixed(1));
+    el("path", {d: `M${L},${y(0)} L${pts.join(" L")} L${R},${y(0)} Z`, fill: "color-mix(in srgb, var(--s1) 22%, transparent)"}, svg);
+    el("path", {d: "M" + pts.join(" L"), fill: "none", stroke: "var(--s1)", "stroke-width": 2}, svg);
+    const worst = dd.indexOf(Math.min(...dd));
+    el("circle", {cx: x(worst), cy: y(dd[worst]), r: 4, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2}, svg);
+    el("text", {x: x(worst), y: y(dd[worst]) + 18, "text-anchor": "middle", class: "dlbl"}, svg, dd[worst].toFixed(1) + " %");
+    [0, 30, 60, 89].forEach(i => el("text", {x: x(i), y: B + 18, "text-anchor": "middle", class: "lbl"}, svg, "day " + (i + 1)));
+  }
+})();
+</script>

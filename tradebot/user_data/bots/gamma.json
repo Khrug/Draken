@@ -1,0 +1,7 @@
+{
+  "bot_name": "draken-gamma",
+  "webhook": {
+    "enabled": true
+  },
+  "fee": 0.0009
+}

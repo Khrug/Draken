@@ -1,0 +1,13 @@
+{
+  "fee": 0.002,
+  "exchange": {
+    "name": "okx",
+    "key": "",
+    "secret": "",
+    "password": "",
+    "ccxt_config": {},
+    "ccxt_async_config": {},
+    "pair_whitelist": ["BTC/EUR", "ETH/EUR", "SOL/EUR"],
+    "pair_blacklist": []
+  }
+}

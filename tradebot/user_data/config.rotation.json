@@ -1,0 +1,37 @@
+{
+  "max_open_trades": 3,
+  "exchange": {
+    "pair_whitelist": [
+      "XRP/EUR",
+      "BTC/EUR",
+      "SOL/EUR",
+      "ETH/EUR",
+      "ADA/EUR",
+      "NEAR/EUR",
+      "SUI/EUR",
+      "HYPE/EUR",
+      "ONDO/EUR",
+      "LINK/EUR",
+      "FET/EUR",
+      "TAO/EUR",
+      "QNT/EUR",
+      "PHA/EUR",
+      "LTC/EUR",
+      "WLD/EUR",
+      "XLM/EUR",
+      "AVAX/EUR",
+      "ENA/EUR",
+      "PEPE/EUR",
+      "DOGE/EUR",
+      "UNI/EUR",
+      "HBAR/EUR",
+      "RENDER/EUR",
+      "SEI/EUR",
+      "BCH/EUR",
+      "GRASS/EUR",
+      "PENGU/EUR",
+      "AAVE/EUR",
+      "ARB/EUR"
+    ]
+  }
+}
